@@ -1,0 +1,73 @@
+[
+  {
+    "name": "firstName",
+    "label": "First Name",
+    "type": "text",
+    "validators": ["required", "minLength:2"],
+    "placeholder": "Enter first name"
+  },
+  {
+    "name": "lastName",
+    "label": "Last Name",
+    "type": "text",
+    "validators": ["required", "minLength:2"],
+    "placeholder": "Enter last name"
+  },
+  {
+    "name": "email",
+    "label": "Email Address",
+    "type": "email",
+    "validators": ["required", "email"],
+    "placeholder": "Enter email"
+  },
+  {
+    "name": "phone",
+    "label": "Phone Number",
+    "type": "tel",
+    "validators": ["required", "pattern:^[0-9]{10,15}$"],
+    "placeholder": "Enter phone number"
+  },
+  {
+    "name": "address",
+    "label": "Street Address",
+    "type": "text",
+    "validators": ["required"],
+    "placeholder": "123 Main Street"
+  },
+  {
+    "name": "city",
+    "label": "City",
+    "type": "text",
+    "validators": ["required"],
+    "placeholder": "Enter city"
+  },
+  {
+    "name": "state",
+    "label": "State / Province",
+    "type": "text",
+    "validators": ["required"],
+    "placeholder": "Enter state"
+  },
+  {
+    "name": "zipCode",
+    "label": "ZIP / Postal Code",
+    "type": "text",
+    "validators": ["required", "pattern:^[0-9]{4,10}$"],
+    "placeholder": "Enter ZIP code"
+  },
+  {
+    "name": "country",
+    "label": "Country",
+    "type": "select",
+    "validators": ["required"],
+    "options": ["United States", "United Kingdom", "Canada", "Australia", "India"],
+    "placeholder": "Select country"
+  },
+  {
+    "name": "deliveryNotes",
+    "label": "Delivery Notes",
+    "type": "textarea",
+    "validators": [],
+    "placeholder": "Any special instructions for delivery..."
+  }
+]
