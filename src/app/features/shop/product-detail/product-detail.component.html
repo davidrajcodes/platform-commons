@@ -1,0 +1,100 @@
+@if (product) {
+  <div class="detail">
+    <nav class="breadcrumb">
+      <a routerLink="/shop/catalogue" class="breadcrumb__link">Catalogue</a>
+      <span class="breadcrumb__sep">›</span>
+      <span class="breadcrumb__current">{{ product.category }}</span>
+      <span class="breadcrumb__sep">›</span>
+      <span class="breadcrumb__current">{{ product.title }}</span>
+    </nav>
+
+    <div class="detail__layout">
+      <div class="detail__gallery">
+        <img
+          [src]="selectedImage()"
+          [alt]="product.title"
+          class="detail__main-image"
+        />
+        <div class="detail__thumbnails">
+          @for (img of product.images; track img) {
+            <img
+              [src]="img"
+              [alt]="product.title"
+              class="detail__thumb"
+              [class.detail__thumb--active]="selectedImage() === img"
+              (click)="selectedImage.set(img)"
+            />
+          }
+        </div>
+      </div>
+
+      <div class="detail__info">
+        <div class="detail__category">{{ product.category }}</div>
+        <h1 class="detail__title">{{ product.title }}</h1>
+        @if (product.brand) {
+          <div class="detail__brand">By {{ product.brand }}</div>
+        }
+        <div class="detail__rating">
+          <span class="stars">{{ starsDisplay() }}</span>
+          <span class="rating-num">{{ product.rating }} / 5</span>
+        </div>
+
+        <div class="detail__price-block">
+          <span class="detail__price">{{ product.price | appCurrency }}</span>
+          @if (product.discountPercentage > 0) {
+            <span class="detail__discount">-{{ product.discountPercentage.toFixed(0) }}%</span>
+          }
+        </div>
+
+        <p class="detail__description">{{ product.description }}</p>
+
+        <div class="detail__stock">
+          @if (currentStock() > 0) {
+            <span class="stock-ok">✓ In Stock ({{ currentStock() }} available)</span>
+          } @else {
+            <span class="stock-out">✗ Out of Stock</span>
+          }
+        </div>
+
+        @if (currentStock() > 0) {
+          <div class="quantity-selector">
+            <button class="qty-btn" (click)="adjustQty(-1)" [disabled]="qty() <= 1">−</button>
+            <span class="qty-display">{{ qty() }}</span>
+            <button class="qty-btn" (click)="adjustQty(1)" [disabled]="qty() >= currentStock()">+</button>
+          </div>
+
+          <button class="add-to-cart-btn" (click)="addToCart()">
+            Add to Cart — {{ (product.price * qty()) | appCurrency }}
+          </button>
+        } @else {
+          <button class="notify-btn" disabled>🔔 Notify Me When Available</button>
+        }
+
+        @if (product.tags.length) {
+          <div class="detail__tags">
+            @for (tag of product.tags; track tag) {
+              <span class="tag">{{ tag }}</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (relatedProducts().length > 0) {
+      <div class="related-section">
+        <h2 class="related-title">Related Products</h2>
+        <div class="related-grid">
+          @for (rp of relatedProducts(); track rp.id) {
+            <div class="related-card" (click)="navigate(rp.id)">
+              <img [src]="rp.thumbnail" [alt]="rp.title" class="related-thumb" />
+              <div class="related-info">
+                <div class="related-name">{{ rp.title }}</div>
+                <div class="related-price">{{ rp.price | appCurrency }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}

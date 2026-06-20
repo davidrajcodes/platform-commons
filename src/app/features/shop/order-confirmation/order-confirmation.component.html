@@ -1,0 +1,58 @@
+<div class="confirmation">
+  @if (loading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+    </div>
+  } @else if (order()) {
+    <div class="confirmation__card">
+      <div class="success-icon">🎉</div>
+      <h1 class="confirmation__title">Order Confirmed!</h1>
+      <p class="confirmation__subtitle">
+        Thank you for your order. We'll send you a confirmation email shortly.
+      </p>
+
+      <div class="order-id-box">
+        <span class="order-id-label">Order ID</span>
+        <span class="order-id">{{ order()!.id }}</span>
+      </div>
+
+      <div class="order-details">
+        <div class="detail-section">
+          <h3 class="detail-heading">Items Ordered</h3>
+          @for (item of order()!.items; track item.productId) {
+            <div class="item-row">
+              <img [src]="item.productThumbnail" [alt]="item.productTitle" class="item-img" />
+              <div class="item-info">
+                <div class="item-title">{{ item.productTitle }}</div>
+                <div class="item-qty">Qty: {{ item.quantity }}</div>
+              </div>
+              <div class="item-price">{{ (item.price * item.quantity) | appCurrency }}</div>
+            </div>
+          }
+        </div>
+
+        <div class="totals-section">
+          <div class="totals-row"><span>Subtotal</span><span>{{ order()!.subtotal | appCurrency }}</span></div>
+          <div class="totals-row"><span>Tax</span><span>{{ order()!.tax | appCurrency }}</span></div>
+          <div class="totals-row totals-row--total"><span>Total Paid</span><span>{{ order()!.total | appCurrency }}</span></div>
+        </div>
+
+        <div class="detail-section">
+          <h3 class="detail-heading">Delivery Address</h3>
+          @for (entry of addressLines(); track entry) {
+            <p class="address-line">{{ entry }}</p>
+          }
+        </div>
+      </div>
+
+      <div class="confirmation__actions">
+        <a routerLink="/shop/catalogue" class="btn-primary">Continue Shopping</a>
+      </div>
+    </div>
+  } @else {
+    <div class="not-found">
+      <h2>Order not found</h2>
+      <a routerLink="/shop/catalogue">Go back to shop</a>
+    </div>
+  }
+</div>

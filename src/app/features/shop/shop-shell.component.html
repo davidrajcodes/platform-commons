@@ -1,0 +1,55 @@
+<div class="shop-shell">
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a routerLink="/shop/catalogue" class="navbar__brand">
+        <span class="navbar__logo">🛍️</span>
+        <span class="navbar__brand-text">Platform Store</span>
+      </a>
+
+      <nav class="navbar__nav">
+        <a routerLink="/shop/catalogue" routerLinkActive="navbar__link--active" class="navbar__link">Catalogue</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <!-- Cart icon with live count -->
+        <a routerLink="/shop/checkout/step/1" class="cart-btn" [class.cart-btn--has-items]="cartCount() > 0">
+          🛒
+          @if (cartCount() > 0) {
+          <span class="cart-count">{{ cartCount() }}</span>
+          }
+        </a>
+
+        <div class="user-menu" #userMenu>
+
+          <div class="user-avatar" (click)="updateClick()">
+            {{ initials() }}
+          </div>
+
+          <div class="user-dropdown" [class.active]="profileClicked()">
+
+            <div class="user-name">
+              {{ auth.currentUser()?.name }}
+            </div>
+
+            <button class="logout-btn" (click)="logout()">
+              Sign out
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shop-main">
+    @defer (on viewport) {
+    <router-outlet />
+    } @placeholder {
+    <div class="defer-placeholder">
+      <div class="defer-spinner"></div>
+      <p>Loading store…</p>
+    </div>
+    }
+  </main>
+</div>

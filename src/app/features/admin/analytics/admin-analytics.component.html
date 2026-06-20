@@ -1,0 +1,76 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Analytics</h1>
+      <p class="page-subtitle">Sales overview and performance metrics</p>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    @for (kpi of kpis(); track kpi.label) {
+      <div class="kpi-card">
+        <div class="kpi-icon">{{ kpi.icon }}</div>
+        <div class="kpi-value">{{ kpi.value }}</div>
+        <div class="kpi-label">{{ kpi.label }}</div>
+      </div>
+    }
+  </div>
+
+  <!-- Status breakdown -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h2 class="chart-title">Orders by Status</h2>
+      <div class="status-chart">
+        @for (stat of statusBreakdown(); track stat.status) {
+          <div class="bar-row">
+            <span class="bar-label">{{ stat.status }}</span>
+            <div class="bar-track">
+              <div
+                class="bar-fill bar-fill--{{ stat.status.toLowerCase() }}"
+                [style.width.%]="stat.pct"
+              ></div>
+            </div>
+            <span class="bar-count">{{ stat.count }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h2 class="chart-title">Top Customers</h2>
+      <div class="customers-list">
+        @for (customer of topCustomers(); track customer.name; let i = $index) {
+          <div class="customer-row">
+            <div class="customer-rank">#{{ i + 1 }}</div>
+            <div class="customer-info">
+              <div class="customer-name">{{ customer.name }}</div>
+              <div class="customer-orders">{{ customer.orderCount }} orders</div>
+            </div>
+            <div class="customer-total">{{ customer.total | appCurrency }}</div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent orders summary -->
+  <div class="chart-card">
+    <h2 class="chart-title">Revenue Last 7 Days</h2>
+    <div class="revenue-chart">
+      @for (day of last7Days(); track day.date) {
+        <div class="rev-bar-col">
+          <div class="rev-bar-track">
+            <div
+              class="rev-bar-fill"
+              [style.height.%]="day.pct"
+              [title]="(day.revenue | appCurrency)"
+            ></div>
+          </div>
+          <div class="rev-bar-label">{{ day.dayLabel }}</div>
+          <div class="rev-bar-value">{{ day.revenue | appCurrency }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

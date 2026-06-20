@@ -1,0 +1,161 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Orders</h1>
+      <p class="page-subtitle">{{ filteredOrders().length }} orders</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <div class="status-tabs">
+      @for (s of statusOptions; track s) {
+        <button
+          class="tab-btn"
+          [class.tab-btn--active]="statusFilter() === s"
+          (click)="statusFilter.set(s)"
+        >{{ s }}</button>
+      }
+    </div>
+    <div class="date-filters">
+      <input type="date" class="filter-input" [ngModel]="dateFrom()"
+        (ngModelChange)="dateFrom.set($event)" />
+      <span class="date-sep">→</span>
+      <input type="date" class="filter-input" [ngModel]="dateTo()" (ngModelChange)="dateTo.set($event)" />
+    </div>
+    <div>
+      <button class="btn-primary" (click)="resetFilters()">
+        ↺ Reset Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    @if (loading()) {
+      <div class="skeleton-rows">
+        @for (i of [1,2,3,4]; track i) { <div class="skeleton-row"></div> }
+      </div>
+    } @else if (filteredOrders().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div>No orders found</div>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th (click)="sort('id')" class="sortable">Order ID {{ getSortIcon('id') }}</th>
+            <th (click)="sort('customerName')" class="sortable">Customer {{ getSortIcon('customerName') }}</th>
+            <th>Products</th>
+            <th (click)="sort('total')" class="sortable">Total {{ getSortIcon('total') }}</th>
+            <th (click)="sort('status')" class="sortable">Status {{ getSortIcon('status') }}</th>
+            <th (click)="sort('createdAt')" class="sortable">Date {{ getSortIcon('createdAt') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of pagedOrders(); track order.id) {
+            <tr class="table-row clickable" (click)="selectOrder(order)">
+              <td class="mono">{{ order.id }}</td>
+              <td>
+                <div class="customer-cell">
+                  <div class="customer-name">{{ order.customerName }}</div>
+                  <div class="customer-email">{{ order.customerEmail }}</div>
+                </div>
+              </td>
+              <td>
+                <span class="items-count">{{ order.items.length }} item{{ order.items.length > 1 ? 's' : '' }}</span>
+              </td>
+              <td class="price-cell">{{ order.total | appCurrency }}</td>
+              <td>
+                <span class="status-badge status-badge--{{ order.status.toLowerCase() }}">
+                  {{ order.status }}
+                </span>
+              </td>
+              <td class="date-cell">{{ formatDate(order.createdAt) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+  <!-- Pagination -->
+  @if (filteredOrders().length > pageSize) {
+    <div class="pagination">
+      <button class="page-btn" [disabled]="page() === 1" (click)="prevPage()">← Prev</button>
+      <span class="page-info">Page {{ page() }} of {{ totalPages() }}</span>
+      <button class="page-btn" [disabled]="page() >= totalPages()" (click)="nextPage()">Next →</button>
+    </div>
+  }
+</div>
+
+<!-- Order Detail Side Panel -->
+@if (selectedOrder()) {
+  <div class="panel-overlay" (click)="selectedOrder.set(null)">
+    <div class="detail-panel" (click)="$event.stopPropagation()">
+      <div class="panel__header">
+        <div>
+          <h2 class="panel__title">{{ selectedOrder()!.id }}</h2>
+          <p class="panel__subtitle">{{ formatDate(selectedOrder()!.createdAt) }}</p>
+        </div>
+        <button class="panel__close" (click)="selectedOrder.set(null)">✕</button>
+      </div>
+
+      <div class="panel__body">
+        <!-- Customer info -->
+        <div class="section">
+          <h3 class="section-title">Customer</h3>
+          <p class="info-line"><strong>{{ selectedOrder()!.customerName }}</strong></p>
+          <p class="info-line">{{ selectedOrder()!.customerEmail }}</p>
+        </div>
+
+        <!-- Delivery address -->
+        <div class="section">
+          <h3 class="section-title">Delivery Address</h3>
+          @for (entry of getAddressEntries(selectedOrder()!); track entry.key) {
+            <p class="info-line">{{ entry.value }}</p>
+          }
+        </div>
+
+        <!-- Line items -->
+        <div class="section">
+          <h3 class="section-title">Items</h3>
+          <div class="items-list">
+            @for (item of selectedOrder()!.items; track item.productId) {
+              <div class="item-row">
+                <img [src]="item.productThumbnail" [alt]="item.productTitle" class="item-thumb" />
+                <div class="item-info">
+                  <div class="item-title">{{ item.productTitle }}</div>
+                  <div class="item-qty">Qty: {{ item.quantity }}</div>
+                </div>
+                <div class="item-price">{{ (item.price * item.quantity) | appCurrency }}</div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Totals -->
+        <div class="totals-box">
+          <div class="totals-row"><span>Subtotal</span><span>{{ selectedOrder()!.subtotal | appCurrency }}</span></div>
+          <div class="totals-row"><span>Tax (10%)</span><span>{{ selectedOrder()!.tax | appCurrency }}</span></div>
+          <div class="totals-row totals-row--total"><span>Total</span><span>{{ selectedOrder()!.total | appCurrency }}</span></div>
+        </div>
+
+        <!-- Status update -->
+        <div class="section">
+          <h3 class="section-title">Update Status</h3>
+          <select
+            class="status-select"
+            [value]="selectedOrder()!.status"
+            (change)="updateStatus(selectedOrder()!, $event)"
+          >
+            @for (s of orderStatuses; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+}
