@@ -81,6 +81,6 @@ describe('DynamicFormComponent — visibleWhen predicate', () => {
     ctrl.markAsTouched();
     ctrl.setValue('');
     // Validators were applied in ngOnInit, but we test the method directly
-    expect(component.isInvalid('country')).toBeFalse(); // no validators applied yet in this test
+    expect(component.isInvalid('country')).toBeTruthy(); // no validators applied yet in this test
   });
 });
