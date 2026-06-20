@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "email": "admin1@platform.com",
+    "name": "Alice Admin",
+    "role": "admin",
+    "passwordHash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"
+  },
+  {
+    "id": "2",
+    "email": "admin2@platform.com",
+    "name": "Bob Admin",
+    "role": "admin",
+    "passwordHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"
+  },
+  {
+    "id": "3",
+    "email": "user1@platform.com",
+    "name": "Carol User",
+    "role": "user",
+    "passwordHash": "0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90"
+  },
+  {
+    "id": "4",
+    "email": "user2@platform.com",
+    "name": "Dave User",
+    "role": "user",
+    "passwordHash": "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9"
+  }
+]
