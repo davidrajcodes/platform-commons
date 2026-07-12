@@ -1,5 +1,6 @@
 import {
-  Component, OnInit, inject, signal, computed, DestroyRef, Input
+  Component, OnInit, inject, signal, computed, DestroyRef, Input,
+  SimpleChanges
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -45,6 +46,14 @@ export class ProductDetailComponent implements OnInit {
     if (this.product) {
       this.selectedImage.set(this.product.thumbnail);
       this.loadRelated();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['product'] && this.product) {
+      this.selectedImage.set(this.product.thumbnail); 
+      this.qty.set(1);                                
+      this.loadRelated();                            
     }
   }
 

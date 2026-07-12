@@ -1,0 +1,11 @@
+.card-field { position: relative; }
+    .card-input {
+      width: 100%; padding: 0.7rem 3rem 0.7rem 1rem;
+      border: 1.5px solid #d1d5db; border-radius: 8px;
+      font-size: 1rem; font-family: monospace; letter-spacing: 2px; outline: none;
+      box-sizing: border-box;
+    }
+    .card-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+    .card-input--error { border-color: #ef4444; }
+    .card-brand { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 1.25rem; }
+  

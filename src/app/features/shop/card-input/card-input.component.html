@@ -1,0 +1,15 @@
+    <div class="card-field">
+      <input
+        type="text"
+        [value]="displayValue()"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        placeholder="1234 5678 9012 3456"
+        maxlength="19"
+        class="card-input"
+        [class.card-input--error]="hasError()"
+        autocomplete="cc-number"
+        inputmode="numeric"
+      />
+      <div class="card-brand">{{ cardBrand() }}</div>
+    </div>

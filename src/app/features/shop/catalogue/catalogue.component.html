@@ -1,0 +1,118 @@
+    <div class="catalogue">
+      <div class="catalogue__sidebar">
+        <div class="filter-section">
+          <h3 class="filter-title">Search</h3>
+          <input
+            type="search"
+            placeholder="Search products…"
+            class="filter-input"
+            [value]="searchValue()"
+            (input)="onSearch($event)"
+          />
+        </div>
+
+        <div class="filter-section">
+          <h3 class="filter-title">Categories</h3>
+          <div class="chip-list">
+            <button
+              class="chip"
+              [class.chip--active]="selectedCategories().size === 0"
+              (click)="clearCategories()"
+            >All</button>
+            @for (cat of categories(); track cat) {
+              <button
+                class="chip"
+                [class.chip--active]="selectedCategories().has(cat)"
+                (click)="toggleCategory(cat)"
+              >{{ cat }}</button>
+            }
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <h3 class="filter-title">Price Range</h3>
+          <div class="range-labels">
+            <span>\$0</span>
+            <span>\${{ maxPrice() }}</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            [max]="2000"
+            [value]="maxPrice()"
+            class="range-slider"
+            (input)="onPriceChange($event)"
+          />
+        </div>
+
+        <div class="filter-section">
+          <label class="toggle-label">
+            <input type="checkbox" [checked]="inStockOnly()" (change)="inStockOnly.set(!inStockOnly())" />
+            In Stock Only
+          </label>
+        </div>
+      </div>
+
+      <div class="catalogue__main">
+        <!-- Active filters -->
+        @if (hasActiveFilters()) {
+          <div class="active-filters">
+            @if (searchValue()) {
+              <span class="active-filter">Search: "{{ searchValue() }}" <button (click)="clearSearch()">×</button></span>
+            }
+            @for (cat of selectedCategories(); track cat) {
+              <span class="active-filter">{{ cat }} <button (click)="toggleCategory(cat)">×</button></span>
+            }
+            <button class="clear-all-btn" (click)="clearAll()">Clear All</button>
+          </div>
+        }
+
+        <div class="results-header">
+          <span class="results-count">{{ total() }} products found</span>
+          <select class="sort-select" (change)="onSort($event)">
+            <option value="">Sort by</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating-desc">Rating</option>
+            <option value="title-asc">Name A–Z</option>
+          </select>
+        </div>
+
+        @if (loading()) {
+          <div class="product-grid">
+            @for (i of [1,2,3,4,5,6,7,8]; track i) {
+              <div class="skeleton-card">
+                <div class="skeleton-img"></div>
+                <div class="skeleton-body">
+                  <div class="skeleton-line"></div>
+                  <div class="skeleton-line skeleton-line--short"></div>
+                  <div class="skeleton-line skeleton-line--btn"></div>
+                </div>
+              </div>
+            }
+          </div>
+        } @else if (products().length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>No products found</h3>
+            <p>Try adjusting your filters</p>
+            <button class="btn-outline" (click)="clearAll()">Clear Filters</button>
+          </div>
+        } @else {
+          <div class="product-grid">
+            @for (product of products(); track product.id) {
+              <app-product-card [product]="product" />
+            }
+          </div>
+        }
+
+        <!-- Pagination -->
+        @if (totalPages() > 1) {
+          <div class="pagination">
+            <button class="page-btn" [disabled]="page() === 1" (click)="prevPage()">← Prev</button>
+            <span class="page-info">Page {{ page() }} of {{ totalPages() }}</span>
+            <button class="page-btn" [disabled]="page() >= totalPages()" (click)="nextPage()">Next →</button>
+          </div>
+        }
+      </div>
+    </div>

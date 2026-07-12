@@ -1,0 +1,156 @@
+    <div class="checkout">
+      <!-- Step indicator -->
+      <div class="steps-bar">
+        @for (s of steps; track s.n) {
+          <div class="step" [class.step--active]="currentStep() === s.n" [class.step--done]="currentStep() > s.n">
+            <div class="step__circle">{{ currentStep() > s.n ? '✓' : s.n }}</div>
+            <div class="step__label">{{ s.label }}</div>
+          </div>
+          @if (!$last) { <div class="step__line"></div> }
+        }
+      </div>
+
+      <div class="checkout__layout">
+        <!-- Main form area -->
+        <div class="checkout__main">
+
+          <!-- Step 1: Cart Review -->
+          @if (currentStep() === 1) {
+            <div class="checkout-card">
+              <h2 class="section-title">Your Cart</h2>
+              @if (cartItems().length === 0) {
+                <div class="empty-cart">Your cart is empty. <a routerLink="/shop/catalogue">Browse products</a></div>
+              } @else {
+                @for (item of cartItems(); track item.product.id) {
+                  <div class="cart-item">
+                    <img [src]="item.product.thumbnail" [alt]="item.product.title" class="cart-item__img" />
+                    <div class="cart-item__info">
+                      <div class="cart-item__title">{{ item.product.title }}</div>
+                      <div class="cart-item__price">{{ item.product.price | appCurrency }} each</div>
+                    </div>
+                    <div class="cart-item__qty">
+                      <button class="qty-btn" (click)="updateQty(item.product.id, item.quantity - 1)">−</button>
+                      <span class="qty-value">{{ item.quantity }}</span>
+                      <button class="qty-btn" (click)="updateQty(item.product.id, item.quantity + 1)" [disabled]="item.quantity >= item.product.stock">+</button>
+                    </div>
+                    <div class="cart-item__subtotal">{{ (item.product.price * item.quantity) | appCurrency }}</div>
+                    <button class="remove-btn" (click)="removeItem(item.product.id)">🗑️</button>
+                  </div>
+                }
+                <button class="btn-primary" (click)="proceedToStep(2)">
+                  Continue to Delivery →
+                </button>
+              }
+            </div>
+          }
+
+          <!-- Step 2: Delivery Details -->
+          @if (currentStep() === 2) {
+            <div class="checkout-card">
+              <h2 class="section-title">Delivery Details</h2>
+              <app-dynamic-form [fields]="deliveryFields" [formGroup]="deliveryForm" />
+              <div class="step-actions">
+                <button class="btn-secondary" (click)="goToStep(1)">← Back</button>
+                <button class="btn-primary" (click)="proceedToStep(3)" [disabled]="deliveryForm.invalid">
+                  Continue to Payment →
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- Step 3: Payment -->
+          @if (currentStep() === 3) {
+            <div class="checkout-card">
+              <h2 class="section-title">Payment Details</h2>
+              <form [formGroup]="paymentForm" class="payment-form" novalidate>
+                <div class="form-group">
+                  <label class="form-label">Card Number *</label>
+                  <app-card-input formControlName="cardNumber" />
+                  @if (paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched) {
+                    <span class="form-error">{{ getCardError() }}</span>
+                  }
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Expiry *</label>
+                    <input type="text" formControlName="expiry" placeholder="MM/YY" class="form-input" maxlength="5" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">CVV *</label>
+                    <input type="text" formControlName="cvv" placeholder="•••" class="form-input" maxlength="4" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Name on Card *</label>
+                  <input type="text" formControlName="nameOnCard" placeholder="As it appears on your card" class="form-input" />
+                </div>
+
+                <!-- Billing same as delivery toggle -->
+                <div class="toggle-row">
+                  <label class="toggle-label">
+                    <input type="checkbox" formControlName="sameAsDelivery" />
+                    Billing address same as delivery
+                  </label>
+                </div>
+
+                @if (!paymentForm.get('sameAsDelivery')?.value) {
+                  <div class="billing-fields">
+                    <h3 class="sub-heading">Billing Address</h3>
+                    <div class="form-group">
+                      <label class="form-label">Street Address</label>
+                      <input type="text" formControlName="billingAddress" class="form-input" placeholder="123 Main St" />
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input type="text" formControlName="billingCity" class="form-input" />
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">ZIP</label>
+                        <input type="text" formControlName="billingZip" class="form-input" />
+                      </div>
+                    </div>
+                  </div>
+                }
+              </form>
+
+              <div class="step-actions">
+                <button class="btn-secondary" (click)="goToStep(2)">← Back</button>
+                <button
+                  class="btn-primary btn-primary--submit"
+                  (click)="submitOrder()"
+                  [disabled]="paymentForm.invalid || submitting()"
+                >
+                  {{ submitting() ? 'Processing…' : 'Place Order' }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Order Summary -->
+        <div class="checkout__summary">
+          <div class="summary-card">
+            <h3 class="summary-title">Order Summary</h3>
+            <div class="summary-items">
+              @for (item of cartItems(); track item.product.id) {
+                <div class="summary-row">
+                  <span class="summary-item-name">{{ item.product.title }} ×{{ item.quantity }}</span>
+                  <span>{{ (item.product.price * item.quantity) | appCurrency }}</span>
+                </div>
+              }
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-row">
+              <span>Subtotal</span><span>{{ cartService.subtotal() | appCurrency }}</span>
+            </div>
+            <div class="summary-row">
+              <span>Tax (10%)</span><span>{{ cartService.tax() | appCurrency }}</span>
+            </div>
+            <div class="summary-row summary-row--total">
+              <span>Total</span><span>{{ cartService.total() | appCurrency }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
