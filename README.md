@@ -2,6 +2,12 @@
 
 A full-stack frontend application built with **Angular 19** (standalone components, signals, inject()) covering authentication, admin panel, and user storefront.
 
+## ✨ Demo link
+
+```bash
+https://davidrajcodes.github.io/platform-commons
+```
+
 ## 🚀 Quick Start
 
 ```bash
