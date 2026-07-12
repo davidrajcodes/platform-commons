@@ -1,7 +1,8 @@
 import {
-  Component, OnInit, inject, signal, computed, DestroyRef, Input
+  Component, OnInit, inject, signal, computed, DestroyRef, Input,
+  DOCUMENT
 } from '@angular/core';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -65,7 +66,7 @@ export class CheckoutComponent implements OnInit {
     this.currentStep.set(stepParam);
 
     // Load checkout form config from assets
-    this.http.get<FormFieldConfig[]>(`${this.documentRef.baseURI}/assets/checkout-form.json`).pipe(
+    this.http.get<FormFieldConfig[]>(`${this.documentRef.baseURI}assets/checkout-form.json`).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(fields => {
       this.deliveryFields = fields;
