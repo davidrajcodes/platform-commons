@@ -1,7 +1,7 @@
 import {
   Component, OnInit, inject, signal, computed, DestroyRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { OrderService } from '../../../core/services/order.service';
@@ -11,7 +11,7 @@ import { AppCurrencyPipe } from '../../../shared/pipes/app-currency.pipe';
 @Component({
   selector: 'app-admin-orders',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, AppCurrencyPipe],
+  imports: [ReactiveFormsModule, FormsModule, AppCurrencyPipe],
   templateUrl: './admin-orders.component.html',
   styleUrl: './admin-orders.component.scss',
 })

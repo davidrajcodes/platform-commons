@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { OrderService } from '../../../core/services/order.service';
 import { Order } from '../../../core/models/order.model';
@@ -8,7 +8,7 @@ import { AppCurrencyPipe } from '../../../shared/pipes/app-currency.pipe';
 @Component({
   selector: 'app-admin-analytics',
   standalone: true,
-  imports: [CommonModule, AppCurrencyPipe],
+  imports: [AppCurrencyPipe],
   templateUrl: './admin-analytics.component.html',
   styleUrl: './admin-analytics.component.scss',
 })

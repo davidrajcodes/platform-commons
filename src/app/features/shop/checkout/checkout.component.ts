@@ -2,7 +2,7 @@ import {
   Component, OnInit, inject, signal, computed, DestroyRef, Input,
   DOCUMENT
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -20,7 +20,7 @@ import { CardInputComponent } from '../card-input/card-input.component';
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, DynamicFormComponent, AppCurrencyPipe, CardInputComponent],
+  imports: [ReactiveFormsModule, RouterLink, DynamicFormComponent, AppCurrencyPipe, CardInputComponent],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })

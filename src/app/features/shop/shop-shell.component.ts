@@ -1,13 +1,13 @@
 import { Component, inject, computed, signal, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { AuthService } from '../../core/services/auth.service';
 import { CartService } from '../../core/services/cart.service';
 
 @Component({
   selector: 'app-shop-shell',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './shop-shell.component.html',
   styleUrl: './shop-shell.component.scss',
 })

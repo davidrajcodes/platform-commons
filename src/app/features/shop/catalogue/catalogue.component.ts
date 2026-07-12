@@ -1,7 +1,7 @@
 import {
   Component, OnInit, OnDestroy, inject, signal, computed, DestroyRef, ChangeDetectionStrategy, Input
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -23,7 +23,7 @@ import { AppCurrencyPipe } from '../../../shared/pipes/app-currency.pipe';
   selector: 'app-product-card',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, AppCurrencyPipe],
+  imports: [AppCurrencyPipe],
   template: `
     <div class="card" (click)="navigateToDetail()">
       <div class="card__image-wrap">
@@ -118,7 +118,7 @@ export class ProductCardComponent {
   selector: 'app-catalogue',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, ProductCardComponent],
+  imports: [ReactiveFormsModule, ProductCardComponent],
   templateUrl:'./catalogue.component.html',
   styleUrl:'./catalogue.component.scss'
 })

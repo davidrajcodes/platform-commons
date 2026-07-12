@@ -2,7 +2,7 @@ import {
   Component, OnInit, inject, signal, computed, DestroyRef, Input,
   SimpleChanges
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductService } from '../../../core/services/product.service';
@@ -14,7 +14,7 @@ import { AppCurrencyPipe } from '../../../shared/pipes/app-currency.pipe';
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, AppCurrencyPipe],
+  imports: [RouterLink, AppCurrencyPipe],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })

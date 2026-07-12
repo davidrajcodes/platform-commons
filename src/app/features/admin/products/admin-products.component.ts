@@ -1,7 +1,7 @@
 import {
   Component, OnInit, inject, signal, computed, DestroyRef, ChangeDetectionStrategy
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { AppCurrencyPipe } from '../../../shared/pipes/app-currency.pipe';
   selector: 'app-admin-products',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, AppCurrencyPipe],
+  imports: [ReactiveFormsModule, AppCurrencyPipe],
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.scss',
 })

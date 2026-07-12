@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 
 export interface FormFieldConfig {
@@ -33,7 +33,7 @@ function buildValidators(validatorDefs: string[]): ValidatorFn[] {
 @Component({
   selector: 'app-dynamic-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   template: `
     <div [formGroup]="formGroup" class="dyn-form">
       @for (field of visibleFields; track field.name) {

@@ -1,7 +1,7 @@
 import {
   Component, OnInit, inject, signal, DestroyRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { OrderService } from '../../../core/services/order.service';
@@ -11,7 +11,7 @@ import { AppCurrencyPipe } from '../../../shared/pipes/app-currency.pipe';
 @Component({
   selector: 'app-order-confirmation',
   standalone: true,
-  imports: [CommonModule, RouterLink, AppCurrencyPipe],
+  imports: [RouterLink, AppCurrencyPipe],
   templateUrl: './order-confirmation.component.html',
   styleUrl: './order-confirmation.component.scss',
 })
